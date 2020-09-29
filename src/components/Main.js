@@ -7,6 +7,7 @@ import { PROMOTIONS } from "../shared/promotions";
 import { LEADERS } from "../shared/leaders";
 import Header from "./Header";
 import Home from "./Home";
+import About from "./About";
 import Menu from "./Menu";
 import Contact from "./Contact";
 import DishDetail from "./DishDetail";
@@ -51,6 +52,10 @@ class Main extends Component {
         <Header />
         <Switch>
           <Route path="/home" component={HomePage} />
+          <Route
+            path="/aboutus"
+            component={() => <About leaders={this.state.leaders} />}
+          />
           <Route
             exact
             path="/menu"
