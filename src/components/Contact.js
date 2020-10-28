@@ -8,7 +8,7 @@ import {
   Label,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { Control, LocalForm, Errors } from "react-redux-form";
+import { Control, Form, Errors, actions } from "react-redux-form";
 
 const requared = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -19,47 +19,13 @@ const validEmail = (val) =>
 
 class Contact extends Component {
   handleSubmit(values) {
-    alert("Current State is " + JSON.stringify(values));
+    console.log("Current State is: " + JSON.stringify(values));
+    alert("Current State is: " + JSON.stringify(values));
+    this.props.resetFeedbackForm();
+    // event.preventDefault();
   }
 
-  // validate(firstname, lastname, telnum, email) {
-  //   const errors = {
-  //     firstname: "",
-  //     lastname: "",
-  //     telnum: "",
-  //     email: "",
-  //   };
-
-  //   if (this.state.touched.firstname && firstname.length < 3)
-  //     errors.firstname = "First Name should be >= 3 characters";
-  //   else if (this.state.touched.firstname && firstname.length > 10)
-  //     errors.firstname = "First Name should be <= 10 characters";
-
-  //   if (this.state.touched.lastname && lastname.length < 3)
-  //     errors.lastname = "Last Name should be >= 3 characters";
-  //   else if (this.state.touched.lastname && lastname.length > 10)
-  //     errors.lastname = "Last Name should be <= 10 characters";
-
-  //   const reg = /^\d+$/;
-  //   if (this.state.touched.telnum && !reg.test(telnum))
-  //     errors.telnum = "Tel. Number should contain only numbers";
-
-  //   if (
-  //     this.state.touched.email &&
-  //     email.split("").filter((x) => x === "@").length !== 1
-  //   )
-  //     errors.email = "Email should contain a @";
-
-  //   return errors;
-  // }
-
   render() {
-    // const errors = this.validate(
-    //   this.state.firstname,
-    //   this.state.lastname,
-    //   this.state.telnum,
-    //   this.state.email
-    // );
     return (
       <div className="container">
         <div className="row">
@@ -130,7 +96,10 @@ class Contact extends Component {
             <h3>Send us Your Feedback</h3>
           </div>
           <div className="col-12 col-md-9">
-            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+            <Form
+              model="feedback"
+              onSubmit={(values) => this.handleSubmit(values)}
+            >
               <Row className="form-group">
                 <Label htmlFor="firstname" md={2}>
                   First Name
@@ -294,7 +263,7 @@ class Contact extends Component {
                   </Button>
                 </Col>
               </Row>
-            </LocalForm>
+            </Form>
           </div>
         </div>
       </div>
