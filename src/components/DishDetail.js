@@ -24,6 +24,8 @@ import { Link } from "react-router-dom";
 
 import { baseUrl } from "../shared/baseUrl";
 
+import { FadeTransform, Fade, Stagger } from "react-animation-components";
+
 const requared = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
 const minLength = (len) => (val) => val && val.length >= len;
@@ -136,13 +138,20 @@ class CommentForm extends Component {
 function RenderDish({ dish }) {
   return (
     <div className="col-12 col-md-5 m-1">
-      <Card>
-        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
-        <CardBody>
-          <CardTitle>{dish.name}</CardTitle>
-          <CardText>{dish.description}</CardText>
-        </CardBody>
-      </Card>
+      <FadeTransform
+        in
+        transformProps={{
+          exitTransform: "scale(0.5) translateY(-50%)",
+        }}
+      >
+        <Card>
+          <CardImg top src={baseUrl + dish.image} alt={dish.name} />
+          <CardBody>
+            <CardTitle>{dish.name}</CardTitle>
+            <CardText>{dish.description}</CardText>
+          </CardBody>
+        </Card>
+      </FadeTransform>
     </div>
   );
 }
@@ -151,19 +160,25 @@ function RenderComments({ comments, postComment, dishId }) {
   return (
     <div className="col-12 col-md-5 m-1">
       <h4>Comments</h4>
-      {comments.map((comment) => (
-        <ul key={comment.id} className="list-unstyled">
-          <li>{comment.author}</li>
-          <li>
-            {comment.comment}{" "}
-            {new Date(comment.date).toLocaleString("default", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
-          </li>
-        </ul>
-      ))}
+      <ul className="list-unstyled">
+        <Stagger in>
+          {comments.map((comment) => (
+            <Fade in key={comment.id}>
+              <li>
+                <p>{comment.comment}</p>
+                <p>
+                  -- {comment.author} ,{" "}
+                  {new Date(comment.date).toLocaleString("default", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+              </li>
+            </Fade>
+          ))}
+        </Stagger>
+      </ul>
       <CommentForm dishId={dishId} postComment={postComment} />
     </div>
   );
