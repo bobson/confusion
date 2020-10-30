@@ -8,25 +8,43 @@ import {
   Media,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../shared/baseUrl";
+import { Loading } from "./LoadingComponent";
+import { Fade, Stagger } from "react-animation-components";
 
-function RenderLeaders({ leader }) {
-  return (
-    <div className="col-12 mt-5">
-      <Media tag="li">
-        <Media left middle>
-          <Media object src={leader.image} alt={leader.name} />
+function About(props) {
+  function RenderLeader({ leader }) {
+    return (
+      <Media className="mt-5">
+        <Media left className="mr-5">
+          <Media object src={baseUrl + leader.image} alt={leader.name} />
         </Media>
-        <Media body className="ml-5">
+        <Media body>
           <Media heading>{leader.name}</Media>
           <p>{leader.designation}</p>
-          <p>{leader.description}</p>
+          {leader.description}
         </Media>
       </Media>
-    </div>
-  );
-}
+    );
+  }
 
-function About({ leaders }) {
+  function RenderContent({ leaders, isLoading, errMess }) {
+    if (isLoading) {
+      return <Loading />;
+    } else if (errMess) {
+      return <h4>{errMess}</h4>;
+    } else
+      return (
+        <Stagger in>
+          {props.leaders.map((leader) => (
+            <Fade in key={leader.id}>
+              <RenderLeader key={leader.id} leader={leader} />
+            </Fade>
+          ))}
+        </Stagger>
+      );
+  }
+
   return (
     <div className="container">
       <div className="row">
@@ -104,9 +122,11 @@ function About({ leaders }) {
         </div>
         <div className="col-12">
           <Media list>
-            {leaders.map((leader) => (
-              <RenderLeaders key={leader.id} leader={leader} />
-            ))}
+            <RenderContent
+              leaders={props.leader}
+              isLoading={props.leaderLoading}
+              errMess={props.leaderErrMess}
+            />
           </Media>
         </div>
       </div>
